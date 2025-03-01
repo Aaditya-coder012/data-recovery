@@ -1,0 +1,114 @@
+body {
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.6;
+    background: linear-gradient(135deg, rgba(240, 244, 248, 0.9), rgba(217, 226, 236, 0.9)), url('https://images.unsplash.com/photo-1451187580459-43490279c0fa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1350&q=80') no-repeat center center fixed;
+    background-size: cover;
+    min-height: 100vh;
+    margin: 0;
+}
+
+h1, h2, h3 {
+    font-weight: 700;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.nav-link {
+    font-size: 1.1rem;
+}
+
+.bg-primary {
+    background: linear-gradient(to right, #007bff, #0056b3) !important;
+    border-bottom: 3px solid #004085;
+}
+
+.text-primary {
+    color: #007bff !important;
+}
+
+.tools-bg {
+    background: linear-gradient(to bottom, rgba(255, 255, 255, 0.95), rgba(248, 249, 250, 0.95));
+}
+
+.suggest-bg {
+    background: rgba(233, 236, 239, 0.9);
+}
+
+.card {
+    transition: transform 0.2s, box-shadow 0.2s;
+    background-color: rgba(255, 255, 255, 0.97);
+    border: none;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15) !important;
+}
+
+.tool-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.header-logo {
+    width: 100px;
+    height: 100px;
+    object-fit: contain;
+}
+
+.footer-logo {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
+.btn-outline-primary {
+    border-color: #007bff;
+    color: #007bff;
+}
+
+.btn-outline-primary:hover {
+    background-color: #007bff;
+    color: white;
+}
+
+.btn-outline-secondary {
+    border-color: #6c757d;
+    color: #6c757d;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: white;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
+
+#suggest-tool form {
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+#submission-message {
+    color: #28a745;
+    font-weight: bold;
+}
+
+footer {
+    position: relative;
+    width: 100%;
+    background: linear-gradient(to bottom, #343a40, #212529);
+    border-top: 2px solid #1a1d21;
+}
