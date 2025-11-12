@@ -1,199 +1,66 @@
 /*
 Question 1
+
 #include <bits/stdc++.h>
 using namespace std;
 
-// --------------------------- MIN HEAP CLASS ---------------------------
-class MinHeap {
-    vector<int> heap;
-
-    int parent(int i) { return (i - 1) / 2; }
-    int left(int i) { return (2 * i + 1); }
-    int right(int i) { return (2 * i + 2); }
-
-public:
-    // Insert a new element
-    void insert(int val) {
-        heap.push_back(val);
-        int i = heap.size() - 1;
-
-        // Fix heap property (up-heapify)
-        while (i != 0 && heap[parent(i)] > heap[i]) {
-            swap(heap[i], heap[parent(i)]);
-            i = parent(i);
-        }
-    }
-
-    // Delete the root (minimum element)
-    void deleteRoot() {
-        if (heap.empty()) {
-            cout << "Heap is empty!\n";
-            return;
-        }
-
-        // Replace root with last element and remove last
-        heap[0] = heap.back();
-        heap.pop_back();
-
-        // Restore heap property
-        heapify(0);
-    }
-
-    // Heapify function to maintain heap property
-    void heapify(int i) {
-        int smallest = i;
-        int l = left(i);
-        int r = right(i);
-
-        if (l < heap.size() && heap[l] < heap[smallest])
-            smallest = l;
-        if (r < heap.size() && heap[r] < heap[smallest])
-            smallest = r;
-
-        if (smallest != i) {
-            swap(heap[i], heap[smallest]);
-            heapify(smallest);
-        }
-    }
-
-    // Display the heap
-    void display() {
-        for (int val : heap)
-            cout << val << " ";
-        cout << endl;
-    }
-
-    // Return heap array for property check
-    vector<int> getHeap() {
-        return heap;
-    }
+struct Node {
+    int x, y;
+    vector<string> path; // store movements
 };
 
-// --------------------------- MAX HEAP CLASS ---------------------------
-class MaxHeap {
-    vector<int> heap;
-
-    int parent(int i) { return (i - 1) / 2; }
-    int left(int i) { return (2 * i + 1); }
-    int right(int i) { return (2 * i + 2); }
-
-public:
-    void insert(int val) {
-        heap.push_back(val);
-        int i = heap.size() - 1;
-
-        // Fix heap property (up-heapify)
-        while (i != 0 && heap[parent(i)] < heap[i]) {
-            swap(heap[i], heap[parent(i)]);
-            i = parent(i);
-        }
-    }
-
-    void deleteRoot() {
-        if (heap.empty()) {
-            cout << "Heap is empty!\n";
-            return;
-        }
-
-        heap[0] = heap.back();
-        heap.pop_back();
-
-        heapify(0);
-    }
-
-    void heapify(int i) {
-        int largest = i;
-        int l = left(i);
-        int r = right(i);
-
-        if (l < heap.size() && heap[l] > heap[largest])
-            largest = l;
-        if (r < heap.size() && heap[r] > heap[largest])
-            largest = r;
-
-        if (largest != i) {
-            swap(heap[i], heap[largest]);
-            heapify(largest);
-        }
-    }
-
-    void display() {
-        for (int val : heap)
-            cout << val << " ";
-        cout << endl;
-    }
-
-    vector<int> getHeap() {
-        return heap;
-    }
-};
-
-// --------------------------- HEAP PROPERTY CHECKS ---------------------------
-
-// ✅ Check if an array satisfies Min-Heap property
-bool isMinHeap(vector<int> &arr) {
-    int n = arr.size();
-    for (int i = 0; i <= (n - 2) / 2; i++) {
-        if (arr[i] > arr[2 * i + 1]) return false;
-        if (2 * i + 2 < n && arr[i] > arr[2 * i + 2]) return false;
-    }
-    return true;
-}
-
-// ✅ Check if an array satisfies Max-Heap property
-bool isMaxHeap(vector<int> &arr) {
-    int n = arr.size();
-    for (int i = 0; i <= (n - 2) / 2; i++) {
-        if (arr[i] < arr[2 * i + 1]) return false;
-        if (2 * i + 2 < n && arr[i] < arr[2 * i + 2]) return false;
-    }
-    return true;
-}
-
-// --------------------------- MAIN FUNCTION ---------------------------
 int main() {
-    MinHeap minH;
-    MaxHeap maxH;
+    int n, m;
+    cin >> n >> m;
 
-    cout << "----- MIN HEAP OPERATIONS -----\n";
-    minH.insert(30);
-    minH.insert(10);
-    minH.insert(50);
-    minH.insert(20);
-    cout << "Min Heap after insertions: ";
-    minH.display();
+    vector<vector<int>> grid(n, vector<int>(m));
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < m; j++)
+            cin >> grid[i][j];
 
-    minH.deleteRoot();
-    cout << "Min Heap after deleting root: ";
-    minH.display();
+    if (grid[0][0] == 1 || grid[n-1][m-1] == 1) {
+        cout << "Path Length: -1\nSequence of movement: NIL\n";
+        return 0;
+    }
 
-    cout << "\n----- MAX HEAP OPERATIONS -----\n";
-    maxH.insert(30);
-    maxH.insert(10);
-    maxH.insert(50);
-    maxH.insert(20);
-    cout << "Max Heap after insertions: ";
-    maxH.display();
+    vector<vector<int>> visited(n, vector<int>(m, 0));
+    queue<Node> q;
 
-    maxH.deleteRoot();
-    cout << "Max Heap after deleting root: ";
-    maxH.display();
+    q.push({0, 0, {}});
+    visited[0][0] = 1;
 
-    // ------------------ CHECK HEAP PROPERTY ------------------
-    cout << "\n----- CHECK HEAP PROPERTY -----\n";
-    vector<int> arr1 = {10, 20, 30, 40, 50};
-    vector<int> arr2 = {50, 30, 20, 10, 5};
+    int dx[] = {0, 0, 1, -1};
+    int dy[] = {1, -1, 0, 0};
+    string dir[] = {"right", "left", "down", "up"};
 
-    cout << "Array 1: ";
-    for (int x : arr1) cout << x << " ";
-    cout << "\nIs Min-Heap? " << (isMinHeap(arr1) ? "Yes" : "No") << endl;
-    cout << "Is Max-Heap? " << (isMaxHeap(arr1) ? "Yes" : "No") << endl;
+    while (!q.empty()) {
+        Node curr = q.front(); q.pop();
 
-    cout << "\nArray 2: ";
-    for (int x : arr2) cout << x << " ";
-    cout << "\nIs Min-Heap? " << (isMinHeap(arr2) ? "Yes" : "No") << endl;
-    cout << "Is Max-Heap? " << (isMaxHeap(arr2) ? "Yes" : "No") << endl;
+        if (curr.x == n-1 && curr.y == m-1) {
+            cout << "Path Length: " << curr.path.size() << endl;
+            cout << "Sequence of movement: ";
+            for (int i = 0; i < curr.path.size(); i++) {
+                cout << curr.path[i];
+                if (i != curr.path.size() - 1) cout << ",";
+            }
+            cout << endl;
+            return 0;
+        }
 
+        for (int i = 0; i < 4; i++) {
+            int nx = curr.x + dx[i];
+            int ny = curr.y + dy[i];
+
+            if (nx >= 0 && ny >= 0 && nx < n && ny < m && !visited[nx][ny] && grid[nx][ny] == 0) {
+                visited[nx][ny] = 1;
+                vector<string> newPath = curr.path;
+                newPath.push_back(dir[i]);
+                q.push({nx, ny, newPath});
+            }
+        }
+    }
+
+    cout << "Path Length: -1\nSequence of movement: NIL\n";
     return 0;
 }
 
@@ -201,134 +68,44 @@ int main() {
 
 /*
 Question 2
+
 #include <bits/stdc++.h>
 using namespace std;
 
-// Function to heapify a subtree rooted at index i
-void heapify(vector<int> &arr, int n, int i)
-{
-    int largest = i;       // Initialize largest as root
-    int left = 2 * i + 1;  // left child
-    int right = 2 * i + 2; // right child
+void heapify(vector<int>& arr, int n, int i) {
+    int smallest = i;
+    int left = 2*i + 1;
+    int right = 2*i + 2;
 
-    // If left child is greater than root
-    if (left < n && arr[left] > arr[largest])
-        largest = left;
+    if (left < n && arr[left] < arr[smallest])
+        smallest = left;
+    if (right < n && arr[right] < arr[smallest])
+        smallest = right;
 
-    // If right child is greater than largest so far
-    if (right < n && arr[right] > arr[largest])
-        largest = right;
-
-    // If largest is not root
-    if (largest != i)
-    {
-        swap(arr[i], arr[largest]);
-
-        // Recursively heapify the affected subtree
-        heapify(arr, n, largest);
+    if (smallest != i) {
+        swap(arr[i], arr[smallest]);
+        heapify(arr, n, smallest);
     }
 }
 
-// Function to build a Max-Heap from an unsorted array
-void buildMaxHeap(vector<int> &arr, int n)
-{
-    // Start from the last non-leaf node and heapify each
-    for (int i = n / 2 - 1; i >= 0; i--)
+void buildMinHeap(vector<int>& arr, int n) {
+    for (int i = n/2 - 1; i >= 0; i--)
         heapify(arr, n, i);
 }
 
-// Function to perform Heap Sort
-void heapSort(vector<int> &arr)
-{
-    int n = arr.size();
-
-    // Step 1: Build max heap
-    buildMaxHeap(arr, n);
-
-    // Step 2: One by one extract elements from heap
-    for (int i = n - 1; i > 0; i--)
-    {
-        // Move current root to end
-        swap(arr[0], arr[i]);
-
-        // Call heapify on the reduced heap
-        heapify(arr, i, 0);
-    }
-}
-
-int main()
-{
+int main() {
     int n;
-    cout << "Enter number of elements: ";
     cin >> n;
-
     vector<int> arr(n);
-    cout << "Enter " << n << " elements: ";
     for (int i = 0; i < n; i++)
         cin >> arr[i];
 
-    cout << "\nOriginal (Unsorted) Array: ";
+    buildMinHeap(arr, n);
+
+    cout << "Min Heap: ";
     for (int x : arr)
         cout << x << " ";
     cout << endl;
-
-    // Convert array into Max-Heap and sort it
-    heapSort(arr);
-
-    cout << "Array After Heap Sort: ";
-    for (int x : arr)
-        cout << x << " ";
-    cout << endl;
-
-    return 0;
-}
-*/
-
-/*
-Question 3
-
-#include <bits/stdc++.h>
-using namespace std;
-
-// Function to find Kth smallest element
-int findKthSmallest(vector<int>& arr, int k) {
-    priority_queue<int> maxHeap;  // Max-Heap
-
-    for (int num : arr) {
-        maxHeap.push(num);
-        if (maxHeap.size() > k)
-            maxHeap.pop(); // keep only k smallest elements
-    }
-    return maxHeap.top();
-}
-
-// Function to find Kth largest element
-int findKthLargest(vector<int>& arr, int k) {
-    priority_queue<int, vector<int>, greater<int>> minHeap; // Min-Heap
-
-    for (int num : arr) {
-        minHeap.push(num);
-        if (minHeap.size() > k)
-            minHeap.pop(); // keep only k largest elements
-    }
-    return minHeap.top();
-}
-
-int main() {
-    vector<int> arr = {7, 10, 4, 3, 20, 15};
-    int k = 3;
-
-    cout << "Array elements: ";
-    for (int x : arr) cout << x << " ";
-    cout << "\n";
-
-    cout << "K = " << k << endl;
-
-    int kthSmallest = findKthSmallest(arr, k);
-    int kthLargest = findKthLargest(arr, k);
-
-    cout << "Kth Smallest Element: " << kthSmallest << endl;
-    cout << "Kth Largest Element: " << kthLargest << endl;
 
     return 0;
 }
