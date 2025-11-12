@@ -1,3 +1,5 @@
+/*
+Question 1
 #include <bits/stdc++.h>
 using namespace std;
 
@@ -194,3 +196,141 @@ int main() {
 
     return 0;
 }
+
+*/
+
+/*
+Question 2
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to heapify a subtree rooted at index i
+void heapify(vector<int> &arr, int n, int i)
+{
+    int largest = i;       // Initialize largest as root
+    int left = 2 * i + 1;  // left child
+    int right = 2 * i + 2; // right child
+
+    // If left child is greater than root
+    if (left < n && arr[left] > arr[largest])
+        largest = left;
+
+    // If right child is greater than largest so far
+    if (right < n && arr[right] > arr[largest])
+        largest = right;
+
+    // If largest is not root
+    if (largest != i)
+    {
+        swap(arr[i], arr[largest]);
+
+        // Recursively heapify the affected subtree
+        heapify(arr, n, largest);
+    }
+}
+
+// Function to build a Max-Heap from an unsorted array
+void buildMaxHeap(vector<int> &arr, int n)
+{
+    // Start from the last non-leaf node and heapify each
+    for (int i = n / 2 - 1; i >= 0; i--)
+        heapify(arr, n, i);
+}
+
+// Function to perform Heap Sort
+void heapSort(vector<int> &arr)
+{
+    int n = arr.size();
+
+    // Step 1: Build max heap
+    buildMaxHeap(arr, n);
+
+    // Step 2: One by one extract elements from heap
+    for (int i = n - 1; i > 0; i--)
+    {
+        // Move current root to end
+        swap(arr[0], arr[i]);
+
+        // Call heapify on the reduced heap
+        heapify(arr, i, 0);
+    }
+}
+
+int main()
+{
+    int n;
+    cout << "Enter number of elements: ";
+    cin >> n;
+
+    vector<int> arr(n);
+    cout << "Enter " << n << " elements: ";
+    for (int i = 0; i < n; i++)
+        cin >> arr[i];
+
+    cout << "\nOriginal (Unsorted) Array: ";
+    for (int x : arr)
+        cout << x << " ";
+    cout << endl;
+
+    // Convert array into Max-Heap and sort it
+    heapSort(arr);
+
+    cout << "Array After Heap Sort: ";
+    for (int x : arr)
+        cout << x << " ";
+    cout << endl;
+
+    return 0;
+}
+*/
+
+/*
+Question 3
+
+#include <bits/stdc++.h>
+using namespace std;
+
+// Function to find Kth smallest element
+int findKthSmallest(vector<int>& arr, int k) {
+    priority_queue<int> maxHeap;  // Max-Heap
+
+    for (int num : arr) {
+        maxHeap.push(num);
+        if (maxHeap.size() > k)
+            maxHeap.pop(); // keep only k smallest elements
+    }
+    return maxHeap.top();
+}
+
+// Function to find Kth largest element
+int findKthLargest(vector<int>& arr, int k) {
+    priority_queue<int, vector<int>, greater<int>> minHeap; // Min-Heap
+
+    for (int num : arr) {
+        minHeap.push(num);
+        if (minHeap.size() > k)
+            minHeap.pop(); // keep only k largest elements
+    }
+    return minHeap.top();
+}
+
+int main() {
+    vector<int> arr = {7, 10, 4, 3, 20, 15};
+    int k = 3;
+
+    cout << "Array elements: ";
+    for (int x : arr) cout << x << " ";
+    cout << "\n";
+
+    cout << "K = " << k << endl;
+
+    int kthSmallest = findKthSmallest(arr, k);
+    int kthLargest = findKthLargest(arr, k);
+
+    cout << "Kth Smallest Element: " << kthSmallest << endl;
+    cout << "Kth Largest Element: " << kthLargest << endl;
+
+    return 0;
+}
+
+*/
